@@ -9,6 +9,8 @@ with open('classes.json') as data_file1:
 
 studentAvail = []
 classes = {}
+classList = {"classes": {}}
+studList = {"students": {}}
 
 def parseTimetoPos(time):
 		if time == "NA":
@@ -21,6 +23,30 @@ def parseTimetoPos(time):
 		minute = int(time[3:5])/30
 		pos = 2*(hour-8) + minute 
 		return pos 
+
+def convertPostoTime(pos):
+	time = ""
+	if pos > 7:
+		time += "PM"
+	else:
+		time += "AM"
+	hour = (pos/2)+8
+	if hour < 10:
+		time += "0"
+	time += str(hour)
+	if pos % 2 == 0:
+		time += "00"
+	else: 
+		time += "30"
+	return time
+
+def convertSectoStr(sec):
+	s = sec["day"].upper() + "-"
+	s += convertPostoTime(sec["start"]) + "-"
+	s += convertPostoTime(sec["end"])
+	return s
+
+
 
 def parseStudentAvailability(num):
 	dict = {}
@@ -55,10 +81,19 @@ def parseClasses(num):
 	return dict
 
 #section is time1 or time2's dictionary
-def addClass(stud, className, section):
+def addClass(stud, className, section, cList, sList):
 	for i in range (section["start"], section["end"]):
 		stud.values()[0][section["day"]][i] = className
 	section["capacity"] = section["capacity"] - 1
+	#add student to class list
+	cListStudNum = "student" + str(20-section["capacity"])
+	cListStud = {cListStudNum: {"id": stud["id"], "name": stud.keys()[0]}}
+	cList["classes"][className][convertSectoStr(section)].update(cListStud)
+	#add class to student's classes taken
+	if sList["students"]["student" + stud["id"]]["classesTaken"]:
+		sList["students"]["student" + stud["id"]]["classesTaken"] += "," 
+	sList["students"]["student" + stud["id"]]["classesTaken"] += className + "-" + convertSectoStr(section)
+
 
 def checkAvailable(time, section):
 	for i in range (section["start"], section["end"]):
@@ -67,15 +102,23 @@ def checkAvailable(time, section):
 	return 1
 
 
+
 for i in range(1, len(data)+1):
 	studentAvail.append(parseStudentAvailability(i))
 
 for j in range(0, len(data1['classes'])):
 	classes.update(parseClasses(j+101))
 
+for className in classes: 
+	tempClass = {className: {}}
+	for i in range(0, 2):
+		sec = convertSectoStr(classes[className]["times"][i])
+		tempClass[className].update({sec: {}})
+	classList["classes"].update(tempClass)
 
-#addClass(studentAvail[0], "Mathematics", classes["Mathematics"]["times"][0])
-#addClass(studentAvail[0], "Mathematics", classes["Mathematics"]["times"][1])
 
-print studentAvail[0]
-#print studentAvail[0]
+for student in studentAvail:
+	s = "student" + student["id"]
+	tempStud = {s: {}}
+	tempStud[s].update({"id": student["id"], "name": student.keys()[0], "classesTaken": ""})
+	studList["students"].update(tempStud)

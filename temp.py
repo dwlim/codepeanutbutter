@@ -8,7 +8,7 @@ with open('classes.json') as data_file1:
 	    data1 = json.load(data_file1)
 
 studentAvail = []
-classes = {}
+classes = []
 classList = {"classes": {}}
 studList = {"students": {}}
 
@@ -52,42 +52,42 @@ def parseStudentAvailability(num):
 	dict = {}
 	number = str(num)
 	name = str(data[number][0])
-	dict = {name : {'Monday' : [], 'Tuesday' : [], 'Wednesday' : [], 'Thursday' : [], 'Friday' : []}, "id": number}
-	dict[name]["Monday"] = ["Busy"] * 27
-	dict[name]["Tuesday"] = ["Busy"] * 27
-	dict[name]["Wednesday"] = ["Busy"] * 27
-	dict[name]["Thursday"] = ["Busy"] * 27
-	dict[name]["Friday"] = ["Busy"] * 27
+	dict = {"name": name, "schedule": {'Monday' : [], 'Tuesday' : [], 'Wednesday' : [], 'Thursday' : [], 'Friday' : []}, "id": number}
+	dict["schedule"]["Monday"] = ["Busy"] * 27
+	dict["schedule"]["Tuesday"] = ["Busy"] * 27
+	dict["schedule"]["Wednesday"] = ["Busy"] * 27
+	dict["schedule"]["Thursday"] = ["Busy"] * 27
+	dict["schedule"]["Friday"] = ["Busy"] * 27
 
 	for index in data[number][1].keys():
 		day = data[number][1][index]["day"]
 		start = parseTimetoPos(data[number][1][index]["start"])
 		end = parseTimetoPos(data[number][1][index]["end"])
 		for j in range(end - start):
-			dict[name][day][start + j] = "Free"
+			dict["schedule"][day][start + j] = "Free"
 	return dict
 
 def parseClasses(num):
 	dict = {}
 	classCode = str(num)
 	name = str(data1['classes'][classCode]["name"])
-	dict = {name: {"times": []}}
+	dict = {"subject": name, "times": []}
 	for time in data1['classes'][classCode]["times"]:
 		start = parseTimetoPos(data1['classes'][classCode]["times"][time]["start"])
 		end = parseTimetoPos(data1['classes'][classCode]["times"][time]["end"])
 		timeDict = {"day": str(data1['classes'][classCode]["times"][time]["day"]), "start": start, "end": end, "capacity": 20}
-		dict[name]["times"].append(timeDict)
+		dict["times"].append(timeDict)
 
 	return dict
 
 #section is time1 or time2's dictionary
 def addClass(stud, className, section, cList, sList):
 	for i in range (section["start"], section["end"]):
-		stud.values()[0][section["day"]][i] = className
+		stud["schedule"][section["day"]][i] = className
 	section["capacity"] = section["capacity"] - 1
 	#add student to class list
 	cListStudNum = "student" + str(20-section["capacity"])
-	cListStud = {cListStudNum: {"id": stud["id"], "name": stud.keys()[0]}}
+	cListStud = {cListStudNum: {"id": stud["id"], "name": stud["name"]}}
 	cList["classes"][className][convertSectoStr(section)].update(cListStud)
 	#add class to student's classes taken
 	if sList["students"]["student" + stud["id"]]["classesTaken"]:
@@ -101,24 +101,22 @@ def checkAvailable(time, section):
 			return 0
 	return 1
 
-
-
 for i in range(1, len(data)+1):
 	studentAvail.append(parseStudentAvailability(i))
 
+
 for j in range(0, len(data1['classes'])):
-	classes.update(parseClasses(j+101))
+	classes.append(parseClasses(j+101))
 
-for className in classes: 
-	tempClass = {className: {}}
+for c in classes: 
+	tempClass = {c["subject"]: {}}
 	for i in range(0, 2):
-		sec = convertSectoStr(classes[className]["times"][i])
-		tempClass[className].update({sec: {}})
+		sec = convertSectoStr(c["times"][i])
+		tempClass[c["subject"]].update({sec: {}})
 	classList["classes"].update(tempClass)
-
 
 for student in studentAvail:
 	s = "student" + student["id"]
 	tempStud = {s: {}}
-	tempStud[s].update({"id": student["id"], "name": student.keys()[0], "classesTaken": ""})
+	tempStud[s].update({"id": student["id"], "name": student["name"], "classesTaken": ""})
 	studList["students"].update(tempStud)

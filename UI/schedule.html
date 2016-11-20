@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-
 <html>
+<head>
+	<title>HCI College Scheduling</title>
+</head>
 
 <body>
-	<script type="text/javascript" src="main.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<meta name="viewport" content="width=device-width" />
+	<script type="text/javascript" src="main.js"></script>
+	
+	<div id="studentDropdown">
+		<form action="studentschedule.php" method="post" onsubmit="return validateStud();">
+			<select id="studentName" name="studentName">
+				<option value="">Select Name</option>
+			</select>
+			<input type="submit" name="submit"/>
+		</form>
+	</div>
+	<input type='button' id="studToggle" value="Student">
 
+	<div id="profDropdown">
+		<form action="professorschedule.php" method="post" onsubmit="return validateProf();">
+			<select id= "className" name="className">
+				<option value="">Select Class</option>
+			</select>
+			<input type="submit" name="submit"/>
+		</form>
+	</div>
+	<button id="profToggle">Professor</button>
+	
+	<button id="cancel">Cancel</button>
 </body>
 
 </html>
+
+

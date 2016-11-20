@@ -1,38 +1,58 @@
-// parse data in JSON file
-// might not work for other app users?
-// dependent on local file
-//var data = JSON.parse(./challenge_example);
-//document.getElementById("test").innerHTML = data;
+$(document).ready(function(){
+    $('#studentDropdown').hide();
+    $('#profDropdown').hide();
+    $('#cancel').hide();
 
-/*function roll(){
-	var randomNumber1 = Math.floor(Math.random() * singers.length);
-	var randomNumber2 = Math.floor(Math.random() * songs.length);
-	var chosenSinger = singers[randomNumber1];
-	var chosenSong = songs[randomNumber2];
-	document.getElementById("singer").innerHTML = chosenSinger.bold();
-	document.getElementById("song").innerHTML = chosenSong.bold();
-}*/
+    $("#studToggle").click(function(){
+        $("#studentDropdown").show();
+        $("#cancel").show();
+        $("#studToggle").hide();
+        $("#profToggle").hide();
 
-function loadJSON(callback) {
+    });
 
-	var xobj = new XMLHttpRequest();
-	xobj.overrideMimeType("application/json");
-	xobj.open('GET', './challenge_example.json', true);
-	xobj.onreadystatechange = function() {
-		if(xobj.readyState == 4 && xobj.status == "200") {
-			callback(xobj.responseText);
-		}
-	};
-	xobj.send(null);
+    $("#profToggle").click(function(){
+    	$("#profDropdown").show();
+    	$("#cancel").show();
+    	$("#studToggle").hide();
+    	$("#profToggle").hide();
+    });
+
+    $("#cancel").click(function(){
+    	$('#studentDropdown').hide();
+    	$('#profDropdown').hide();
+    	$("#profToggle").show();
+    	$("#studToggle").show();
+    	$('#cancel').hide();
+    });
+    
+    $.getJSON("challenge_example.json", function(data){
+        $.each(data.students,function(key,value){
+			$('#studentName').append('<option value="' + value.name + '">' + value.name + '</option>');
+        });
+        $.each(data.classes, function(key, value){
+        	$('#className').append('<option value="' + key + '">' + key + '</option>');
+        });
+
+    });
+});
+
+function validateStud() {
+	var name = document.getElementById("studentName").value;
+	if (!name) {
+		alert("Please select a name.");
+		return false;
+	}
+	return true;	
 }
 
-function init() {
-	loadJSON(function(response) {
-		var data = JSON.parse(response);
-		document.write(data);
-	});
+function validateProf() {
+    var className = document.getElementById("className").value;
+    if (!className) {
+        alert("Please select a Class.");
+        return false;
+    }
+    return true;
 }
-
-init();
 
 

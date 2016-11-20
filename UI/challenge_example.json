@@ -82,7 +82,76 @@
                     "id": "3",
                     "name": "ALEX, ANDERSON"
                 }
+            },
+            "TUESDAY-AM0800-AM1000": {
+                "student1": {
+                    "id": "19",
+                    "name": "EDWARD, ANNUNZIO"
+                },
+                "student2": {
+                    "id": "25",
+                    "name": "ISABEL, ARENAS"
+                },
+                "student3": {
+                    "id": "29",
+                    "name": "SCOTT, AHERN"
+                },
+                "student4": {
+                    "id": "32",
+                    "name": "PATRICK, ASHE"
+                },
+        
+                "student20": {
+                    "id": "55",
+                    "name": "JOSE, ALVAREZ"
+                }
             }
+        },
+        "Physics": {
+            "TUESDAY-AM0830-AM1030": {
+                "student1": {
+                    "id": "1",
+                    "name": "CANDELARIO, AQUINO"
+                },
+                "student2": {
+                    "id": "10",
+                    "name": "MARK, ANDERSEN"
+                }
+
+            },
+            "WEDNESDAY-AM0800-AM1000": {
+                "student1": {
+                    "id": "15",
+                    "name": "GRACE, AKINLEMIBOLA"
+                },
+                "student2": {
+                    "id": "16",
+                    "name": "BLAIR, ALTENBACH"
+                }
+            }
+        }
+    },
+    
+    "students": {
+        "student1": {
+            "id": "1",
+            "name": "CANDELARIO, AQUINO",
+            "classesTaken": "Mathematics-MONDAY-AM0830-AM1030,Physics-TUESDAY-AM0830-AM1030,Biology-WEDNESDAY-AM0830-AM1030,History-FRIDAY-AM0800-AM1030,Sociology-WEDNESDAY-PM0100-PM0300"
+        },
+        "student2": {
+            "id": "10",
+            "name": "MARK, ANDERSEN",
+            "classesTaken": "Mathematics-MONDAY-AM0830-AM1030,Physics-TUESDAY-AM0830-AM1030,Biology-WEDNESDAY-AM0830-AM1030,History-THURSDAY-AM0830-AM1100,Sociology-WEDNESDAY-PM0100-PM0300"
+        },
+        "student79": {
+            "id": "80",
+            "name": "BILAL, ALI",
+            "classesTaken": "Programming-FRIDAY-PM0100-PM0300,English-WEDNESDAY-AM1000-AM1130"
+        },
+        "student80": {
+            "id": "9",
+            "name": "MARSHALL, ANDREWS JR",
+            "classesTaken": "Music-FRIDAY-AM0800-AM1030,English-WEDNESDAY-AM1000-AM1130"
         }
     }
 }

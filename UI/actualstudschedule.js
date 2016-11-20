@@ -62,6 +62,38 @@ $(document).ready(function(){
             }
             classes.push(tempObj);
         }
-        console.log(classes);
+        for (var i = 0; i < classes.length; i++) {
+
+            stime = (parseInt(classes[i].start.substring(2,4)) - 8)*2
+            stime += (parseInt(classes[i].start.substring(4)) / 30)
+            etime = (parseInt(classes[i].end.substring(2,4)) - 8)*2
+            etime += (parseInt(classes[i].end.substring(4)) / 30)
+            /*etime - stime
+            loop ^
+            document.getEl*/
+            day = null;
+            switch(classes[i].day){
+                case "MONDAY":
+                    day = 100;
+                    break;
+                case "TUESDAY":
+                    day = 200;
+                    break;
+                case "WEDNESDAY":
+                    day = 300;
+                    break;
+                case "THURSDAY":
+                    day = 400;
+                    break;
+                case "FRIDAY":
+                    day = 500;
+                    break;
+            }
+            pos = day + stime;
+            for (var j = stime; j < etime; j++) {
+                document.getElementById(pos + '').innerHTML = classes[i].subject;
+                pos+= 1;
+            }
+        }
     });
 });

@@ -99,6 +99,7 @@ def checkAvailable(student, section, subject):
 	for i in range (section["start"], section["end"]):
 		if (time[i] != "Free"):
 			return 0
+	# print student["numOfClasses"]
 	if student["numOfClasses"] > 5:
 		return 0
 	if subject in student["subjects"]:
@@ -162,13 +163,14 @@ def fillClasses():
 			b = classes[crse-101]["times"][sctn]
 			if checkAvailable(a,b, classes[crse-101]["subject"]) == 1:
 				if classes[crse-101]["times"][sctn]["capacity"] > 0:
+					print(c, s)
 					addClass(studentAvail[int(sortedStud[s][1])], classes[crse-101]["subject"], classes[crse-101]["times"][sctn], classList, studList)
-					return
+					break
 
 # pprint(studentAvail[0])
 for index in range(400):
 	fillClasses()
 # pprint(checkAvailable(studentAvail[0], classes[0]["times"][0]))
-pprint(studList)
+# pprint(studList)
 
 

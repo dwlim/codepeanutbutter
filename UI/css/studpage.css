@@ -169,14 +169,20 @@ p.copyright {
     margin: 15px 0 0;
 }
 
-table, th, td {
+table, th td {
     border-bottom: 1px solid #989ba0;
     border-collapse: collapse;
-    background-color: f4f8ff;
+    color: black;
+    background-color: #fcfcfc;
+}
+
+th {
+    background-color: #dbdbdb;
+    text-align: center;
 }
 
 table { 
-    box-shadow: 2px 2px 2px #999; 
+    box-shadow: 2px 2px 2px #999;
 }
 
 #calendar {

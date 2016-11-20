@@ -1,5 +1,22 @@
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+
 $(document).ready(function(){
     $.getJSON("challenge_example.json", function(data){
+        className = getUrlParameter("className")
         obj = null;
         $.each(data.classes,function(key,value){
             if (key == className) {
@@ -10,6 +27,7 @@ $(document).ready(function(){
         for (var i=0; i<Object.keys(obj).length; i++) {
             sections.push(parseSection(className, Object.keys(obj)[i], Object.values(obj)[i]));
         }
+        console.log(sections);
     });
 });
 

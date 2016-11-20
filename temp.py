@@ -91,20 +91,29 @@ def addClass(stud, className, section, cList, sList):
 	if sList["students"]["student" + stud["id"]]["classesTaken"]:
 		sList["students"]["student" + stud["id"]]["classesTaken"] += "," 
 	sList["students"]["student" + stud["id"]]["classesTaken"] += className + "-" + convertSectoStr(section)
-	
+	stud["numOfClasses"] += 1
+	stud["subjects"].append(className)
 
-def checkAvailable(time, section):
+def checkAvailable(student, section, subject):
+	time = student["schedule"][section["day"]]
 	for i in range (section["start"], section["end"]):
 		if (time[i] != "Free"):
 			return 0
+	if student["numOfClasses"] > 5:
+		return 0
+	if subject in student["subjects"]:
+		return 0
 	return 1
 
+#updating studentAvail
 for i in range(1, len(data)+1):
 	studentAvail.append(parseStudentAvailability(i))
 
+#updating classes
 for j in range(0, len(data1['classes'])):
 	classes.append(parseClasses(j+101))
 
+#updating classList
 for c in classes: 
 	tempClass = {c["subject"]: {}}
 	for i in range(0, 2):
@@ -112,6 +121,7 @@ for c in classes:
 		tempClass[c["subject"]].update({sec: {}})
 	classList["classes"].update(tempClass)
 
+#updating studList
 for student in studentAvail:
 	s = "student" + student["id"]
 	tempStud = {s: {}}
@@ -124,24 +134,20 @@ def fillClasses():
 		subject = classes[course]["times"]
 		for s in range(len(subject)):
 			sectionParticipants = []
-			section = subject[s]
-			avail = studentAvail
 			for index in range(80):
-				studSched = avail[index]["schedule"][section["day"]]
-				if checkAvailable(studSched, section) == 1:
-					sectionParticipants.append(avail[index]["id"])
-
+				if checkAvailable(studentAvail[index], subject[s], classes[course]["subject"]) == 1:
+					sectionParticipants.append(studentAvail[index]["id"])
 			classNum.append([len(sectionParticipants), (course + 101)*10 + s])
 
 	numClasses = []
 	for stdnum in range(80):
-		studSched = studentAvail[stdnum]["schedule"]
+		studSched = studentAvail[stdnum]
 		studClass = []
-		for day in studSched:
+		for day in studSched["schedule"]:
 			for course in range(len(classes)):
 				for section in range(len(classes[course])):
 					if classes[course]["times"][section]["day"] == day:
-						if checkAvailable(studSched[day], classes[course]["times"][section]) == 1:
+						if checkAvailable(studentAvail[stdnum], classes[course]["times"][section], classes[course]["subject"]) == 1:
 							studClass.append(classes[course]["times"][section]["day"] + classes[course]["subject"])
 		numClasses.append([len(studClass), studentAvail[stdnum]["id"]])
 
@@ -149,19 +155,20 @@ def fillClasses():
 	sortedStud = sorted(numClasses)
 
 	for c in range(len(sortedClass)):
-		# for s in range(len(sortedStud)):
-		crse = int(str(sortedClass[c][1])[:3])
-		sctn = int(str(sortedClass[c][1])[3:])
-		a = studentAvail[int(sortedStud[0][1])]["schedule"][parseClasses(crse)["times"][sctn]["day"]]
-		b = parseClasses(crse)["times"][sctn]
-		if checkAvailable(a,b) == 1:
-			# print studentAvail[int(sortedStud[0][1])]
-			# print parseClasses(crse)["subject"]
-			# print parseClasses(crse)["times"][sctn]
-			addClass(studentAvail[int(sortedStud[0][1])], parseClasses(crse)["subject"], parseClasses(crse)["times"][sctn], classList, studList)
-			return
+		for s in range(len(sortedStud)):
+			crse = int(str(sortedClass[c][1])[:3])
+			sctn = int(str(sortedClass[c][1])[3:])
+			a = studentAvail[int(sortedStud[s][1])-1]
+			b = classes[crse-101]["times"][sctn]
+			if checkAvailable(a,b, classes[crse-101]["subject"]) == 1:
+				if classes[crse-101]["times"][sctn]["capacity"] > 0:
+					addClass(studentAvail[int(sortedStud[s][1])], classes[crse-101]["subject"], classes[crse-101]["times"][sctn], classList, studList)
+					return
 
-fillClasses()
-pprint(classList)
+# pprint(studentAvail[0])
+for index in range(400):
+	fillClasses()
+# pprint(checkAvailable(studentAvail[0], classes[0]["times"][0]))
+pprint(studList)
 
 

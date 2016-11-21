@@ -17,6 +17,8 @@ $(document).ready(function(){
 	name = getUrlParameter("studentName").replace('+'," ");
 
     $.getJSON("challenge_example.json", function(data){
+        document.getElementById("sname").innerHTML = name;
+
         obj = null;
         $.each(data.students,function(key,value){
             if (value.name == name) {

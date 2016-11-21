@@ -18,6 +18,7 @@ $(document).ready(function(){
     $.getJSON("challenge_example.json", function(data){
         className = getUrlParameter("className")
         obj = null;
+        document.getElementById("cname").innerHTML = className;
         $.each(data.classes,function(key,value){
             if (key == className) {
                 obj = value;
@@ -27,7 +28,51 @@ $(document).ready(function(){
         for (var i=0; i<Object.keys(obj).length; i++) {
             sections.push(parseSection(className, Object.keys(obj)[i], Object.values(obj)[i]));
         }
-        console.log(sections);
+        for (var i=0; i<sections.length; i++) {
+            stime = (parseInt(sections[i].start.substring(2,4)) - 8)*2
+            stime += (parseInt(sections[i].start.substring(4)) / 30)
+            etime = (parseInt(sections[i].end.substring(2,4)) - 8)*2
+            etime += (parseInt(sections[i].end.substring(4)) / 30)
+            day = null;
+            switch(sections[i].day){
+                case "MONDAY":
+                    day = 100;
+                    break;
+                case "TUESDAY":
+                    day = 200;
+                    break;
+                case "WEDNESDAY":
+                    day = 300;
+                    break;
+                case "THURSDAY":
+                    day = 400;
+                    break;
+                case "FRIDAY":
+                    day = 500;
+                    break;
+            }
+            pos = day + stime;
+            for (var j = stime; j < etime; j++) {
+                document.getElementById(pos + '').innerHTML = sections[i].subject;
+                pos+= 1;
+            }
+        }
+        for (var j= 0; j<sections[0].students.length; j++) {
+            var table = document.getElementById("sec1");
+            var row = table.insertRow(j+1);
+            var name = row.insertCell(0);
+            var id = row.insertCell(1);
+            name.innerHTML = sections[0].students[j].name;
+            id.innerHTML = sections[0].students[j].id;
+        }
+        for (var k= 0; k<sections[1].students.length; k++) {
+            var table = document.getElementById("sec2");
+            var row = table.insertRow(k+1);
+            var name = row.insertCell(0);
+            var id = row.insertCell(1);
+            name.innerHTML = sections[1].students[k].name;
+            id.innerHTML = sections[1].students[k].id;
+        }
     });
 });
 
